@@ -18,6 +18,7 @@ import kotlinx.serialization.Serializable
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertNotNull
+import kotlin.time.Clock
 
 class StructuredOutputWithToolsIntegrationTest {
 
@@ -202,7 +203,7 @@ class StructuredOutputWithToolsIntegrationTest {
         }
 
         val toolCallTimestamps = mutableMapOf<String, Long>()
-        val currentTime = kotlinx.datetime.Clock.System.now().toEpochMilliseconds()
+        val currentTime = Clock.System.now().toEpochMilliseconds()
 
         val mockExecutor = getMockExecutor {
             // Return structured output

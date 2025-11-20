@@ -8,6 +8,7 @@ import okhttp3.RequestBody.Companion.asRequestBody
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat.FULL
 import org.jetbrains.kotlin.gradle.targets.js.ir.KotlinJsIrLink
 import org.jetbrains.kotlin.gradle.tasks.BaseKotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompilationTask
 import org.jlleitschuh.gradle.ktlint.KtlintExtension
 import java.time.Clock
 import java.time.ZoneId
@@ -142,6 +143,7 @@ tasks.register("reportProjectVersionToTeamCity") {
 }
 
 tasks {
+
     val packSonatypeCentralBundle by registering(Zip::class) {
         group = "publishing"
 
@@ -303,4 +305,13 @@ extensions.getByType<CheckSplitPackagesExtension>().apply {
     includeProjects = setOf(":agents:", ":embeddings:", ":prompt:", ":koog-spring-boot-starter", ":rag:")
     failOnError = true
     includePackages = setOf("ai.koog")
+}
+
+// TODO: remove once kotlin.time becomes stable
+subprojects {
+    tasks.withType<KotlinCompilationTask<*>>().configureEach {
+        compilerOptions {
+            freeCompilerArgs.add("-opt-in=kotlin.time.ExperimentalTime")
+        }
+    }
 }
